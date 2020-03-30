@@ -1,0 +1,219 @@
+// Details Header (Generic across most entities).
+$color-detail-hightlight-text-over: rgba($color-white, 0.9);
+$color-detail-hightlight-text: rgba($color-white, 0.6);
+
+// State based changes.
+@mixin details-header-state($player: 'kodi', $brand-color: $color-kodi, $background: $color-player-background) {
+  .active-player-#{$player} {
+    .details-header {
+      background: $background;
+      .gradient {
+        @include background-image(linear-gradient(left, rgba($background,1) 0%, rgba($background,0.9) 30%, rgba($background,0) 100%));
+      }
+    }
+  }
+}
+
+@include details-header-state('kodi', $color-kodi, $color-detail-header-background);
+@include details-header-state('local', $color-kodi, $color-detail-header-background-local);
+
+.details-header {
+  @include pie-clearfix();
+  position: relative;
+  min-height: 283px;
+  padding-bottom: $spacing-double-unit;
+  a {
+    color: $color-detail-hightlight-text;
+    &:hover {
+      color: rgba($color-white, 0.9);
+    }
+  }
+  .region-details-side {
+    @include set-layout('width-details-side', 'width');
+    padding: $spacing-half-unit 0 $spacing-half-unit $spacing-half-unit;
+    display: none;
+    @include at-bp(medium) {
+      display: block;
+      padding: $spacing-half-unit * 3;
+      position: absolute;
+    }
+  }
+  .region-details-meta-wrapper {
+    @include set-layout('width-details-side', 'margin-left');
+    padding: $spacing-half-unit $spacing-double-unit;
+    color: $color-detail-hightlight-text-over;
+    position: relative;
+    z-index: $z-index-beta;
+    @include at-bp(medium) {
+      padding: $spacing-half-unit $spacing-base-unit 0 $spacing-half-unit;
+    }
+    @include at-bp(xlarge) {
+      padding-top: $spacing-base-unit;
+    }
+    @include at-bp(xxlarge) {
+      margin-right: 300px;
+      color: rgba($color-white, 0.9);
+      .shell-playlist-closed & {
+        margin-right: 500px;
+      }
+    }
+  }
+  .region-details-top {
+    @extend %clearfix;
+  }
+  .region-details-title {
+    color: rgba($color-white, 0.95);
+    margin-bottom: $spacing-half-unit;
+    .sub {
+      font-weight: normal;
+      font-size: $font-size-base;
+      color: rgba($color-white, 0.4);
+    }
+    @include at-bp(medium) {
+      @include span(6 of 8);
+    }
+  }
+  .region-details-rating {
+    width: 73px;
+    font-size: 170%;
+    color: rgba($color-white, 0.7);
+    white-space: nowrap;
+    margin-top: 0.8em;
+    padding-right: $spacing-double-unit;
+    position: relative;
+    text-align: right;
+    i {
+      font-size: 150%;
+      @include set-position-absolute(top -5px right 0);
+      @include icon(action-grade);
+    }
+    @include at-bp(medium) {
+      @include span(2 of 8 last);
+    }
+  }
+  .region-details-subtext {
+    color: $color-detail-hightlight-text;
+    @include pie-clearfix();
+  }
+  .region-details-fanart {
+    background-size: cover;
+    background-position: 50% 50%;
+    width: 100%;
+    @include set-position-absolute(top 0 right 0 bottom 0 left 0);
+    @include at-desktop {
+      width: 600px;
+      margin-left: get-layout($desktop, width-nav);
+    }
+    @include at-bp(xlarge) {
+      left: auto;
+    }
+    z-index: $z-index-alpha;
+    .gradient {
+      content: "";
+      @include set-position-absolute(top 0 left 0 bottom 0);
+      width: 60%;
+    }
+    opacity: 0.3;
+    @include at-bp(xxlarge) {
+      opacity: 0.8;
+    }
+  }
+  .tagline,
+  .description {
+    margin-bottom: $spacing-half-unit;
+    max-height: 22px;
+    overflow: hidden;
+    cursor: pointer;
+    color: $color-detail-hightlight-text;
+    &.expanded {
+      max-height: none;
+    }
+    @include at-bp(xlarge) {
+      padding-right: 10%;
+    }
+  }
+  .tagline {
+    max-height: none;
+    cursor: default;
+    color: rgba($color-white, 0.8);
+  }
+  .meta {
+    margin: $spacing-base-unit 0;
+    span {
+      color: $color-detail-hightlight-text;
+    }
+    label {
+      text-transform: capitalize;
+    }
+  }
+  .runtime {
+    font-size: 120%;
+    margin-bottom: 0.6em;
+    float: left;
+  }
+  .genres {
+    float: right;
+  }
+  .streams {
+    span {
+      color: $color-detail-hightlight-text;
+      text-transform: uppercase;
+    }
+  }
+  .card-detail {
+    .artwork {
+      position: relative;
+      z-index: $z-index-beta;
+    }
+    .play {
+      @include set-position-absolute(top 0 bottom 0 right 0 left 0);
+      @include overlay();
+      z-index: $z-index-beta;
+      @include icon(av-play-arrow);
+      cursor: pointer;
+      opacity: 0;
+      &:before {
+        font-size: 400%;
+        color: rgba($color-white, 0.8);
+        @include set-position-absolute(top 0 bottom 0 right 0 left 0);
+        margin: auto;
+        width: 55px;
+        height: 55px;
+      }
+    }
+    &:hover {
+      .play {
+        opacity: 1;
+      }
+    }
+  }
+
+  label {
+    font-weight: normal;
+  }
+
+  .dropdown > span {
+    cursor: pointer;
+  }
+
+  // Movie and tv specific .
+  .tvshow-show &,
+  .season-details &,
+  .movie-show & {
+    min-height: 315px;
+    @include at-bp(xlarge) {
+      min-height: 405px;
+    }
+  }
+
+  .section-movie &,
+  .section-tvshow & {
+    .region-details-meta-below {
+      height: auto;
+      overflow: initial;
+    }
+
+  }
+
+}
+

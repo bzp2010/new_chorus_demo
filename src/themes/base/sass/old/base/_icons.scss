@@ -1,0 +1,38 @@
+// =============================================================================
+// Name:            Icon
+// Description:     Defines icon base
+// =============================================================================
+
+
+/**
+ * Material fonts.
+ */
+
+$material-set-name: 'mdi';
+
+// Font-face
+@include load-icon-font($material-set-name);
+
+// Create classes for all Material icons.
+@include icon-create-css($material-set-name, $material-set-name);
+
+%icon-style--mdi {
+  @include icon-style(mdi);
+}
+
+
+/**
+ * Icomoon custom fonts.
+ */
+
+$icomoon-set-name: 'icomoon';
+
+// Font-face
+@include load-icon-font($icomoon-set-name);
+
+// Create classes for all Icomoon icons.
+@include icon-create-css($icomoon-set-name, $icomoon-set-name);
+
+%icon-style--icomoon {
+  @include icon-style(icomoon);
+}

@@ -1,0 +1,64 @@
+// =============================================================================
+// Name:            Layout
+// Description:     Layout abstractions.
+// =============================================================================
+
+/**
+ * Standard centered container.
+ */
+@mixin constrained-container($width: $width-container-max) {
+  @include container($width);
+  width: $width-container;
+}
+
+/**
+ * Get a layout value for a given breakpoint.
+ */
+@function get-layout($breakpoint, $key, $layouts: $layouts) {
+  @return map-deep-get($layouts, $breakpoint, $key);
+}
+
+/**
+ * Set a property based on its layout for all breakpoints.
+ *
+ * @param $key
+ *  The item you want the value for. e.g. height-footer
+ * @param $property
+ *   The property you want to assign that to e.g. margin-right or width
+ */
+@mixin set-layout($key, $property, $layouts: $layouts) {
+  @each $size, $layout in $layouts {
+    @if map-has-key($layout, $key) {
+      @include at-bp($size) {
+        #{$property}: get-layout($size, $key);
+        // Playlist width changes state
+        @if $key == 'width-playlist' {
+          .shell-playlist-closed & {
+            #{$property}: get-layout($size, 'width-playlist-closed');
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Standard padding for a content region.
+ */
+@mixin region-content() {
+  position: relative;
+  padding: 12px 12px 30px 12px;
+  .with-header & {
+    padding: 10px 20px 50px 20px;
+  }
+}
+%region-content {
+  @include region-content();
+}
+
+/**
+ * Clearfix.
+ */
+%clearfix {
+  @include pie-clearfix();
+}

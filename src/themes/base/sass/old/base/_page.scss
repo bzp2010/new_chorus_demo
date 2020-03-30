@@ -1,0 +1,34 @@
+@mixin page-padding($padding: $spacing-base-unit) {
+  padding: $padding;
+  @include at-bp(large) {
+    padding: #{$padding * 2};
+    padding-left: #{$padding * 3};
+  }
+}
+
+.page-padding,
+%page-padding {
+  @include page-padding();
+}
+
+.page,
+%page {
+  max-width: $width-page;
+  margin-left: 0;
+  background: $color-white;
+}
+
+.page-secondary,
+%page-secondary {
+  @extend %page;
+  background: rgba($color-white, 0.5);
+}
+
+.page-wrapper,
+%page-wrapper {
+  padding: 0;
+  margin-bottom: #{$spacing-double-unit * 2};
+  .region-content {
+    padding: 0;
+  }
+}

@@ -1,0 +1,95 @@
+// =============================================================================
+// Name:            Layout
+// Description:     Layout variables.
+// =============================================================================
+
+// Spacing units
+$spacing-base-unit: 1em;
+$spacing-double-unit: 2em;
+$spacing-triple-unit: 3em;
+$spacing-half-unit: 0.5em;
+$spacing-one-n-half-unit: 1.5em;
+$spacing-quarter-unit: 0.25em;
+
+// Size units
+$size-region-unit: 50px;
+
+// Width container
+$width-container: 95%;
+$width-container-max: 50em;
+
+// Width playlist
+$width-playlist-small: 310px;
+$width-playlist: 400px;
+$width-playlist-large: $size-region-unit * 12;
+
+// Sidebar first
+$width-sidebar-first: $size-region-unit * 5;
+$width-sidebar-first-medium: $width-sidebar-first - 60;
+
+// Page
+$width-page: 58em;
+
+// Heights
+$height-player: 70px;
+$height-player-small: $height-player;
+$height-loader-small: 20px;
+
+// Z-indexes
+$z-index-below: -10;
+$z-index-base: 0;
+$z-index-alpha: 10;
+$z-index-beta: 20;
+$z-index-gamma: 50;
+$z-index-delta: 100;
+$z-index-above: 500;
+
+// Layout map - used with set-layout().
+$layouts: (
+  // Mobile and up.
+  smallest: (
+    width-playlist: 0,
+    width-playlist-closed: 0,
+    height-player: $height-player-small,
+    width-search: 100%,
+    height-header: $size-region-unit,
+    width-nav: 0,
+    width-sidebar-first: 0,
+    width-player-controls-primary: 100%,
+    width-player-controls-secondary: 100%,
+    width-player-thumb: $height-player-small,
+    height-player-slider: 20px,
+    width-remote: auto,
+  ),
+  medium: (
+    width-details-side: 190px,
+  ),
+  // $desktop breakpoint.
+  large: (
+    width-playlist: $width-playlist-small,
+    width-playlist-closed: $size-region-unit,
+    height-player: $height-player,
+    width-search: $size-region-unit * 4,
+    width-nav: $size-region-unit,
+    width-player-controls-primary: 300px,
+    width-player-controls-secondary: 300px,
+    width-remote: 371px,
+    width-sidebar-first: $width-sidebar-first-medium,
+  ),
+  xlarge: (
+    width-playlist: $width-playlist,
+    width-playlist-closed: $size-region-unit,
+    width-header-fanart: 0,
+    width-details-side: 280px,
+    width-sidebar-first: $width-sidebar-first,
+  )
+);
+
+// Susy:
+$susy: (
+  columns: 12,
+  gutter-position: inside,
+  gutters: 0,
+  math: fluid,
+  output: float,
+);

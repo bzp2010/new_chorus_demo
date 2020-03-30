@@ -1,0 +1,93 @@
+$width-nav-bar: $size-region-unit * 4;
+$width-nav-bar-closed: $size-region-unit;
+
+#nav-bar {
+  background: rgba($color-nav-background, 0.9);
+  width: $width-nav-bar-closed;
+  padding: 0;
+  @include set-position-fixed(top 0 left 0 right auto);
+  @include reset-edges;
+  // overflow-y: auto;
+  @include transition(all 0.3s linear);
+  z-index: $z-index-gamma;
+  //@include set-layout('height-player', 'bottom');
+  @include box-shadow(1px 0 3px 0 rgba(134, 134, 134, 0.05));
+
+  #nav-header {
+    height: 50px;
+    background: $color-nav-header-background image-url('logo.png') 0 0 no-repeat;
+  }
+
+  // Visibility.
+  display: none;
+  .section-home & {
+    display: block;
+  }
+  @include at-desktop {
+    display: block;
+  }
+
+  // Items.
+  nav {
+    padding: $spacing-base-unit 0;
+    ul {
+      @include reset-list;
+      a {
+        display: block;
+        padding: $spacing-half-unit 0;
+        color: $color-nav-text;
+        @include set-position-absolute(top 0 left 0 bottom 0);
+        white-space: nowrap;
+        @include transition(none);
+        span {
+          display: none;
+          padding-right: $spacing-base-unit;
+          font-weight: bold;
+          padding-top: 2px;
+        }
+        i {
+          font-size: 130%;
+          width: $size-region-unit;
+          text-align: center;
+          &:before {
+            @include set-position-absolute(top 10px left 16px);
+          }
+        }
+      }
+      i {
+        //margin-right: $spacing-quarter-unit;
+      }
+      ul {
+        display: none;
+      }
+      li {
+        position: relative;
+        height: 38px;
+        &:hover {
+          white-space: nowrap;
+          a {
+            background: $color-kodi;
+            color: $color-white;
+            span {
+              display: inline-block;
+            }
+            .active-player-local & {
+              background: $color-local;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Subnav
+.region-first .nav-sub {
+  @extend %sidebar--section;
+  h3 {
+    @extend %sidebar--heading;
+  }
+  .items {
+    @extend %sidebar--list;
+  }
+}

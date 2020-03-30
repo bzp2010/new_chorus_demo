@@ -1,0 +1,124 @@
+// =============================================================================
+// Name:            Ui elements
+// Description:     ui abstractions.
+// =============================================================================
+
+@mixin icon-button ($icon-code, $width, $height) {
+  @include vertical-align-wrapper;
+  @include icon($icon-code);
+  width: $width;
+  text-align: center;
+  cursor: pointer;
+  &:before {
+    @include vertical-align-element();
+    height: $height;
+  }
+}
+
+@mixin icon-button-square ($icon-code, $width) {
+  @include icon-button ($icon-code, $width, $width);
+}
+
+@mixin overlay {
+  background: rgba($color-black, 0.55);
+  @include set-position-absolute(top 0 right 0 bottom 0 left 0);
+}
+
+@mixin overlay-icon($icon: av-play-arrow, $height: 100px, $font-size: 200%) {
+  @include overlay;
+  @include icon-button-square($icon, $height);
+  display: none;
+  color: $color-white;
+  font-size: $font-size;
+  &:before {
+    padding-right: 5px;
+  }
+}
+
+@mixin flat-button($color: rgba($color-white, 0.1), $icon: false) {
+  display: inline-block;
+  @extend %transition--all;
+  @include user-select(none);
+  background: $color;
+  padding: $spacing-half-unit $spacing-base-unit;
+  position: relative;
+  cursor: pointer;
+  margin: 0 $spacing-half-unit $spacing-half-unit 0;
+  color: $color-white;
+  text-transform: capitalize;
+  .text {
+    @include text-crop($color);
+    display: block;
+  }
+  &:hover {
+    color: $color-white;
+  }
+  @if $icon {
+    padding-right: $spacing-double-unit + $spacing-half-unit;
+    @include icon($icon);
+    &:before {
+      @include set-position-absolute(top 9px right $spacing-half-unit);
+      color: rgba($color-white, 0.5);
+      font-size: 110%;
+      @extend %transition--all;
+    }
+    &:hover {
+      &:before {
+        color: rgba($color-white, 1);
+      }
+    }
+  }
+}
+%flat-button {
+  @include flat-button();
+}
+
+// Turn ul list into tabs, active class to select/
+@mixin basic-tabs() {
+  background: $color-greyscale-alto;
+  margin-bottom: $spacing-base-unit;
+  padding: $spacing-half-unit $spacing-half-unit 0;
+  @extend %clearfix;
+  li {
+    cursor: pointer;
+    float: left;
+    padding: $spacing-half-unit $spacing-base-unit;
+    &.active {
+      background: $color-white;
+      color: $color-brand-primary;
+    }
+    &:hover {
+      color: $color-brand-primary;
+    }
+  }
+}
+
+%basic-tabs {
+  @include basic-tabs();
+}
+
+// Selected item
+@mixin selected-card() {
+  outline: 2px solid $color-kodi;
+  box-shadow: 0 0 10px 1px rgba($color-kodi, 0.5);
+  position: relative;
+  .active-player-local & {
+    outline: 2px solid $color-local;
+    box-shadow: 0 0 10px 1px rgba($color-local, 0.5);
+    &:before {
+      border-color: $color-local;
+    }
+  }
+  &:before {
+    @include set-position-absolute(bottom -10px right -10px);
+    transform: rotate(-45deg);
+    content: '';
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top-color: $color-brand-primary;
+  }
+  .current-progress {
+    display: none;
+  }
+}

@@ -1,0 +1,261 @@
+#player-wrapper {
+  @include set-position-fixed(top auto left 0 right 0 bottom 0);
+  @include set-layout('height-player', 'height');
+  background: $color-player-background;
+  z-index: $z-index-above + 1;
+}
+
+#player-local {
+  display: none;
+  .active-player-local & {
+    display: block;
+  }
+}
+
+#player-kodi {
+  display: block;
+  .active-player-local & {
+    display: none;
+  }
+  .playing-thumb:hover {
+    .remote-toggle {
+      @include vertical-align-wrapper();
+    }
+  }
+}
+
+.player {
+  .controls-primary,
+  .controls-secondary {
+    background: $color-player-side-background;
+    @include set-layout('height-player', 'height');
+    .control {
+      @extend %transition--all;
+      cursor: pointer;
+      @include set-layout('height-player', 'height');
+      @include vertical-align-wrapper();
+      font-size: $font-size-player-control-primary;
+      color: $color-player-control;
+      &:hover {
+        color: $color-player-control-hover;
+      }
+
+    }
+  }
+  .control {
+    text-align: center;
+    @extend %icon-style--mdi;
+    &:before {
+      @include vertical-align-element();
+    }
+  }
+  .controls-primary {
+    display: none;
+    @include set-layout('width-player-controls-primary', 'width');
+    .control {
+      @include span(33.33%);
+    }
+    @include at-desktop {
+      float: left;
+      display: block;
+    }
+  }
+  .controls-secondary {
+    display: none;
+    @include set-layout('width-player-controls-secondary', 'width');
+    .control {
+      margin-top: -9px;
+      font-size: $font-size-player-control-secondary;
+      @include span(25%);
+    }
+    @include at-desktop {
+      float: right;
+      display: block;
+    }
+  }
+  .now-playing {
+
+    @include set-layout('height-player', 'height');
+    position: relative;
+    font-size: 12px;
+    font-weight: bold;
+    color: $color-player-text;
+    a {
+      color: $color-player-text;
+    }
+    @include at-desktop {
+      margin-right: get-layout($desktop, 'width-player-controls-primary');
+      margin-left: get-layout($desktop, 'width-player-controls-secondary');
+    }
+  }
+  @include thumb-crop(70px, 70px);
+  .playing-thumb {
+    @include set-position-absolute(top 0 bottom 0 left 0);
+    @include set-layout('height-player', 'width');
+    @include set-layout('height-player', 'height');
+    z-index: $z-index-alpha;
+    overflow: hidden;
+    background-color: rgba($color-white, 0.2);
+    background-size: cover;
+    background-position: 50% 50%;
+  }
+  .remote-toggle {
+    @include overlay-icon(action-settings-remote);
+    text-align: center;
+    @include set-layout('height-player', 'height');
+    @include set-layout('height-player', 'width');
+    font-size: 300%;
+    opacity: 0.8;
+    &:before {
+      @include vertical-align-element();
+      @include set-layout('height-player', 'height');
+      @include set-layout('height-player', 'width');
+      padding: 0;
+    }
+  }
+  .playing-info {
+    @include set-layout('height-player', 'margin-left');
+  }
+  .playing-time {
+    @include set-position-absolute(bottom 0 right 0);
+    @include set-layout('height-player-slider', 'top');
+    margin: 7px 10px 0 0;
+    text-align: right;
+  }
+  .playing-meta {
+    margin: 7px 0 0 10px;
+  }
+  .playing-title a,
+  .playing-time-current {
+    color: $color-player-primary-text;
+    font-size: 14px;
+  }
+  .slider-bar {
+    @include set-layout('height-player-slider', 'height');
+    background: $color-player-slider-range-background;
+    border-top: 4px solid rgba($color-white, 0);
+    margin: 0;
+    @extend %transition--all;
+    cursor: pointer;
+    .noUi-base,
+    .noUi-handle,
+    .noUi-origin {
+      @include set-layout('height-player-slider', 'height');
+      @include border-radius(0);
+      top: 0;
+      border: none;
+    }
+    .noUi-origin {
+      background: $color-player-slider-background;
+      top: -4px;
+    }
+    .noUi-handle {
+      background: none;
+      width: 7px;
+      left: -5px;
+    }
+    &:hover {
+      .noUi-handle {
+        background: #6B6B6B;
+      }
+    }
+  }
+  .volume {
+    background: #36393a;
+  }
+}
+
+// Control icons.
+.control-prev:before {  content: icon-code(av-fast-rewind); }
+.control-play:before { content: icon-code(av-play-arrow); font-size: 150%; }
+.control-next:before { content: icon-code(av-fast-forward); }
+.control-mute:before { content: icon-code(av-volume-up); }
+.control-repeat:before { content: icon-code(av-repeat); }
+.control-shuffle:before { content: icon-code(av-shuffle); }
+.control-menu:before { content: icon-code(navigation-more-vert); }
+
+// Player menu
+.player-menu-wrapper {
+  @include set-position-fixed(right 0);
+  @include set-layout('width-player-controls-secondary', 'width');
+  @include set-layout('height-player', 'bottom');
+  z-index: $z-index-gamma;
+  ul {
+    background: $color-white;
+    @include box-shadow(-1px -1px 8px rgba($color-black, 0.1));
+    height: 0;
+    @include transition(height 0.5s ease-in);
+    li {
+      padding: 7px 13px;
+      cursor: pointer;
+      &:hover {
+        background: rgba($color-black, 0.1);
+      }
+    }
+  }
+  &.opened {
+    ul {
+      height: auto;
+    }
+  }
+}
+
+// State based changes.
+@mixin player-state($player: 'kodi', $brand-color: $color-kodi, $background: $color-player-background) {
+  #player-#{$player} {
+    background: $background;
+    .#{$player}-playing & {
+      .control-play:before { content: icon-code(av-pause); }
+      .playing-progress {
+        border-top-color: $brand-color;
+      }
+    }
+    .#{$player}-paused & {
+      .control-play:before { content: icon-code(av-play-arrow); }
+    }
+    .#{$player}-mute-on & {
+      .control-mute {
+        &:hover {
+          color: $brand-color;
+        }
+        &:before { content: icon-code(av-volume-mute); }
+      }
+    }
+    .#{$player}-repeat-one & {
+      .control-repeat {
+        color: $color-player-control-active;
+        &:before { content: icon-code(av-repeat-one); }
+        &:hover {
+          color: $brand-color;
+        }
+      }
+    }
+    .#{$player}-repeat-all & {
+      .control-repeat {
+        color: $color-player-control-active;
+        &:hover {
+          color: $brand-color;
+        }
+      }
+    }
+    .#{$player}-shuffled-on & {
+      .control-shuffle {
+        color: $color-player-control-active;
+        &:hover {
+          color: $brand-color;
+        }
+      }
+    }
+    .slider-bar {
+      background: tint($background, 8%);
+      .noUi-origin {
+        background: shade($background, 10%);
+      }
+    }
+  }
+}
+
+// Apply player colors
+@include player-state('kodi', $color-kodi, $color-player-background);
+@include player-state('local', $color-local, $color-background-local);
+

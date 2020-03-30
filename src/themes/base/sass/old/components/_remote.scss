@@ -1,0 +1,250 @@
+
+#remote {
+  display: none;
+  .section-remote & {
+    display: block;
+  }
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  @include set-layout('height-player', 'bottom');
+  // @include set-layout('width-nav', 'left');
+  @include set-layout('height-header', 'top');
+  @include set-layout('width-playlist', 'right');
+  background-color: $color-remote-background;
+  z-index: $z-index-above;
+  background-size: cover;
+
+}
+
+#remote-background {
+  @include set-position-absolute(top 0 right 0 left 0 bottom 360px);
+  background-color: $color-greyscale-outer-space;
+  background-position: 50% 50%;
+  background-size: cover;
+  @include at-desktop {
+    bottom: 0;
+    z-index: 1;
+    background-color: $color-detail-content-background;
+  }
+}
+
+$pad-height: 145px;
+$color-remote-background-button: #222324;
+.kodi-remote {
+  position: absolute;
+  bottom: 180px;
+  left: 0;
+  right: 0;
+  font-size: 1.7em;
+  color: #6F7374;
+  overflow: hidden;
+  z-index: 500;
+  @include at-desktop {
+    bottom: 0;
+  }
+  @include set-layout('width-remote', 'width');
+  .ibut {
+    background: $color-remote-background-button;
+    &:hover {
+      color: #ccc;
+      cursor: pointer;
+    }
+  }
+  .main-controls {
+    background: $color-remote-background;
+    @include pie-clearfix()
+  }
+  .direction {
+    background: $color-remote-background-button;
+    height: $pad-height + 10;
+    margin-top: -12px;
+    @include span(3 of 4);
+    position: relative;
+    z-index: 10;
+    .pad {
+      margin: 5px auto;
+      //float: right;
+      width: 240px;
+      position: relative;
+      text-align: center;
+
+      .ibut {
+        height: $pad-height;
+        position: absolute;
+        top: 0;
+        left: 80px;
+        width: 80px;
+        font-size: 125%;
+        &.up, &.down, &.ok {
+          height: $pad-height / 3;
+          line-height: $pad-height / 3;
+        }
+        &.down {
+          top: ($pad-height / 3) * 2;
+        }
+        &.ok {
+          top: $pad-height / 3;
+          font-size: 12px;
+        }
+        &.left {
+          bottom: 0;
+          left: 0;
+          line-height: $pad-height;
+          padding-left: 20px;
+        }
+        &.right {
+          bottom: 0;
+          right: 0;
+          left: auto;
+          line-height: $pad-height;
+          padding-right: 20px;
+        }
+      }
+    }
+  }
+  .buttons {
+    @include span(1 of 4 last);
+    padding: 6px 8px 4px;
+    margin-top: -20px;
+    .ibut {
+      display: block;
+      padding: 11px 0;
+      text-align: center;
+      margin: 1px 0 9px 0;
+    }
+  }
+  .alt-controls .row,
+  .secondary-controls {
+    clear: both;
+    background: $color-remote-background;
+    //@include set-layout('height-player', 'height');
+    height: $height-player;
+    .ibut {
+      background: $color-remote-background-button;
+      width: 33%;
+      padding: 0;
+      @include set-layout('height-player', 'line-height');
+      font-size: 1.5em;
+      text-align: center;
+      float: left;
+      margin-bottom: 12px;
+    }
+  }
+  .secondary-controls {
+    height: auto;
+    @extend %clearfix;
+  }
+  .alt-controls {
+    .row {
+      margin: 8px 0;
+    }
+  }
+  .playing-area {
+    height: 150px;
+    position: relative;
+    font-size: 15px;
+    color: #838b8d;
+    .not-playing,
+    .playing {
+      padding: 10px 20px 35px;
+      text-align: right;
+    }
+    .playing {
+      background: #3b3f40 0 0 no-repeat;
+      background-size: cover;
+      display: none;
+    }
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      height: 24px;
+      z-index: 5;
+    }
+  }
+}
+
+// Remote sizes.
+$open-remote-mobile-sizing-unit: 75px;
+$open-remote-desktop-sizing-unit: get-layout($desktop, height-player);
+$open-remote-desktop-player-controls-primary: get-layout($desktop, width-player-controls-primary);
+$open-remote-desktop-player-controls-secondary: get-layout($desktop, width-player-controls-secondary);
+
+%open-remote-square {
+  height: $open-remote-mobile-sizing-unit;
+  width: $open-remote-mobile-sizing-unit;
+}
+%open-remote-height {
+  height: $open-remote-mobile-sizing-unit;
+}
+
+.section-remote {
+  #player-wrapper {
+    height: $size-region-unit * 5;
+  }
+  .player {
+    .controls-secondary,
+    .controls-primary {
+      display: block;
+      margin-bottom: 12px;
+      &, .control {
+        @extend %open-remote-height;
+      }
+    }
+    .now-playing {
+      margin: 10px 0 0 0;
+      &, .thumb {
+        @extend %open-remote-height;
+      }
+      .remote-toggle,
+      .thumb {
+        @extend %open-remote-square;
+      }
+    }
+    .playing-info {
+      margin-left: $open-remote-mobile-sizing-unit;
+    }
+  }
+
+  // Reset to correct size.
+  @include at-desktop {
+    #player-wrapper {
+      height: $open-remote-desktop-sizing-unit;
+    }
+    .player {
+      .now-playing,
+      .controls-secondary,
+      .controls-primary {
+        margin: 0;
+        &, .control {
+          height: $open-remote-desktop-sizing-unit;
+        }
+        &, .thumb {
+          height: $open-remote-desktop-sizing-unit;
+        }
+        .thumb {
+          width: $open-remote-desktop-sizing-unit;
+        }
+        .playing-info {
+          margin-left: $open-remote-desktop-sizing-unit;
+        }
+      }
+      .now-playing {
+        margin-left: $open-remote-desktop-player-controls-primary;
+        margin-right: $open-remote-desktop-player-controls-secondary;
+      }
+    }
+  }
+}
+
+#modal-window.style-system {
+  .modal-dialog {
+    width: 300px;
+    min-width: 300px;
+  }
+}
+

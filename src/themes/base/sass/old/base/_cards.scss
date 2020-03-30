@@ -1,0 +1,297 @@
+// =============================================================================
+// Name:            Cards
+// Description:     A card is our common 'teaser' view.
+// =============================================================================
+
+// Common dimensions.
+$card-width: 159px;
+$card-width-mobile: 60px;
+$card-wide-width: 276px;
+$card-spacing: 5px;
+$card-details-spacing: 8px 10px;
+
+// Size map
+$card-layout: (
+  square: (
+    width: $card-width,
+    height: 216px,
+    height-image: $card-width,
+    offset-image: 0
+  ),
+  square-medium: (
+    width: $card-width + 40,
+    height: auto,
+    height-image: $card-width + 40,
+    offset-image: 0
+  ),
+  wide: (
+    width: $card-wide-width,
+    height: 170px,
+    height-image: 138px,
+    offset-image: 20%
+  ),
+  episode: (
+    width: $card-wide-width - 1,
+    height: 196px,
+    height-image: 138px,
+    offset-image: 50%
+  ),
+  tall: (
+    width: $card-width,
+    height: 300px,
+    height-image: 235px,
+    offset-image: 0
+  )
+);
+
+
+/**
+ * Get a card layout
+ */
+@function get-card-size($size, $property, $card-layout: $card-layout) {
+  @return map-deep-get($card-layout, $size, $property);
+}
+
+
+/**
+ * The card base typography
+ */
+@mixin card-meta-typography ($color-base: $color-greyscale-gray, $color-title: $color-text-dark) {
+  color: $color-base;
+  a {
+    color: $color-base;
+  }
+  .title {
+    a {
+      color: $color-title;
+    }
+  }
+  .subtitle {
+    font-size: 85%;
+    margin-top: 5px;
+  }
+  .dropdown i,
+  .actions li,
+  .play {
+    color: rgba($color-white, 0.8);
+    &:hover {
+      color: $color-white;
+    }
+  }
+  .record {
+    color: rgba($color-white, 0.8);
+    &:hover {
+      color: $color-record;
+    }
+  }
+}
+
+/**
+ * Set artwork size for cards not using the card mixin
+ */
+@mixin card-artwork-size($width, $height) {
+  width: $width;
+  .artwork,
+  .artwork .thumb {
+    width: $width;
+    height: $height;
+  }
+}
+
+/**
+ * Artwork starts off at 2/3 of original size then full size on larger screens.
+ */
+@mixin responsive-card-artwork-size($width, $height) {
+  @include card-artwork-size(ceil($width * 0.66), ceil($height * 0.66));
+  @include at-bp(xlarge) {
+    @include card-artwork-size($width, $height);
+  }
+}
+
+/**
+ * The card mixin
+ */
+@mixin card($size: square, $background: $color-white) {
+  @include card-meta-typography();
+  width: get-card-size($size, width);
+  height: get-card-size($size, height);
+  margin: $card-spacing;
+  background: $background;
+  position: relative;
+  overflow: hidden;
+  // placeholder invisible
+  &.ph {
+    opacity: 0.1;
+    @include box-shadow(none);
+  }
+  .artwork {
+    @include image-crop(get-card-size($size, height-image), get-card-size($size, width), get-card-size($size, offset-image));
+    position: relative;
+    background: #ccc 50% 50% no-repeat;
+    background-size: cover;
+    a {
+      display: block;
+    }
+    .thumb:after {
+      content: "";
+      @include set-position-absolute(top 0 left 0 right 0);
+      height: get-card-size($size, height);
+      @include overlay;
+      opacity: 0;
+      @include transition(0.1s all linear);
+    }
+  }
+  .entity-progress {
+    @include set-position-absolute(bottom 0 left 0 right 0);
+    top: auto;
+    z-index: $z-index-beta;
+    .current-progress {
+      height: 2px;
+      background: $color-kodi;
+    }
+  }
+  .watched-tick {
+    @include icon(navigation-check);
+    color: $color-kodi;
+    @include set-position-absolute(bottom 3px right 10px);
+    font-size: 125%;
+    display: none;
+  }
+  .watched {
+    @include icon-button-square(toggle-check-box-outline-blank, $spacing-half-unit * 3);
+    font-size: 135%;
+    // Hide on thumbs page because collection is cached in local storage.
+    // TODO: make this work.
+    .thumbs-page & {
+      display: none;
+    }
+  }
+  &.is-watched {
+    .watched {
+      @include icon(toggle-check-box);
+      color: $color-kodi;
+    }
+  }
+  .thumb {
+    display: block;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+  }
+  .meta {
+    position: relative;
+    padding: $card-details-spacing;
+    width: get-card-size($size, width);
+    .title {
+      @include text-crop($background);
+    }
+    .subtitle {
+      @include text-crop($background);
+    }
+  }
+  .play {
+    @include icon-button-square(av-play-arrow, $spacing-half-unit * 3);
+    @include set-position-absolute(bottom 0 left 0);
+    font-size: 220%;
+    display: none;
+    z-index: $z-index-beta;
+
+  }
+  .record {
+    @include icon-button-square(image-brightness-1, $spacing-half-unit * 3);
+    @include set-position-absolute(bottom 7px right 10px);
+    font-size: 150%;
+    display: none;
+    z-index: $z-index-beta;
+
+  }
+  .dropdown {
+    @include set-position-absolute(top 5px right 0);
+    i {
+      @include icon-button-square(navigation-more-vert, $spacing-half-unit * 3);
+      z-index: $z-index-beta;
+      font-size: 180%;
+      display: none;
+    }
+  }
+  .actions {
+    @include set-position-absolute(top 10px right 35px);
+    @include vertical-align-wrapper();
+    display: none;
+    .thumbs {
+      @include icon-button-square(action-thumb-up, $spacing-half-unit * 3);
+      font-size: 135%;
+      .disable-thumbs & {
+        display: none;
+      }
+    }
+    li {
+      float: left;
+      margin-left: 3px;
+      &:before {
+        display: table-cell !important;
+      }
+    }
+  }
+  &:hover {
+    .artwork .thumb:after {
+      opacity: 1;
+    }
+    .actions,
+    .dropdown i,
+    .play {
+      display: table;
+    }
+    .record {
+      display: table;
+    }
+  }
+  &.selected {
+    @include selected-card();
+  }
+  .dropdown-menu {
+    left: auto;
+    right: 0px;
+    top: -7px;
+  }
+  &.thumbs-up {
+    .actions .thumbs {
+      color: $color-kodi;
+    }
+  }
+}
+
+
+/**
+ * Extendables.
+ */
+%card--square {
+  @include card();
+}
+%card--wide {
+  @include card(wide);
+}
+%card--episode {
+  @include card(episode);
+}
+%card--tall {
+  @include card(tall);
+}
+
+
+/**
+ * The card grids.
+ */
+@mixin cards-grid() {
+  .card {
+    display: inline-block;
+  }
+}
+
+
+/**
+ * Extendables.
+ */
+%cards--grid {
+  @include cards-grid();
+}

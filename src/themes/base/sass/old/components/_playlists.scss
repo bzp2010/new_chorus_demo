@@ -1,0 +1,272 @@
+$playlist-item-height: 34px;
+$playlist-item-hover-height: 50px;
+$playlist-item-open-height: 80px;
+
+.playlist-items {
+  li {
+    border-bottom: 1px solid $color-playlist-item-border;
+    height: $playlist-item-height;
+    position: relative;
+    color: $color-playlist-text;
+    a {
+      color: $color-playlist-text;
+    }
+
+    &.sortable-ghost,
+    &.row-playing,
+    &.row-paused,
+    &:hover {
+      height: $playlist-item-hover-height + 1;
+      background-color: $color-playlist-active-background;
+      @include thumb-crop($playlist-item-hover-height, $playlist-item-hover-height);
+      .subtitle,
+      .thumb {
+        display: block;
+      }
+      .title a {
+        color: $color-playlist-title-hover-text;
+      }
+    }
+    &.row-playing,
+    &.row-paused {
+      height: $playlist-item-open-height;
+      background-image: image-url('row-playing-white.gif');
+      background-repeat: no-repeat;
+      background-position: 2px 1px;
+      .remove {
+        display: none !important;
+      }
+      @include thumb-crop($playlist-item-open-height, $playlist-item-open-height);
+      .thumb {
+        @include set-position-absolute(right 0 bottom 0 top 0);
+        margin: 0;
+        .play {
+          display: none !important;
+        }
+        .thumbs {
+          @include overlay-icon($height: $playlist-item-hover-height, $font-size: 200%, $icon: action-thumb-up);
+          width: $playlist-item-open-height;
+          &:before {
+            width: $playlist-item-open-height;
+            height: $playlist-item-open-height;
+          }
+        }
+        &:hover {
+          .thumbs {
+            display: block;
+          }
+        }
+      }
+      .meta {
+        margin-right: $playlist-item-open-height + 10;
+        margin-left: 27px;
+        .title {
+          margin-top: 5px;
+          font-size: 110%;
+        }
+      }
+    }
+    &.row-paused {
+      background-image: image-url('row-pause-white.png');
+    }
+    &.sortable-ghost {
+      height: $playlist-item-hover-height;
+      background: rgba($color-white, 0.3);
+      opacity: 0.5;
+    }
+    &.thumbs-up {
+      .thumbs {
+        color: $color-kodi !important;
+        .active-player-local & {
+          color: $color-local !important;
+        }
+      }
+    }
+  }
+  .thumb {
+    @include image-crop ($playlist-item-hover-height, $playlist-item-hover-height);
+    float: left;
+    margin-right: 10px;
+    display: none;
+    position: relative;
+    &:hover {
+      .play {
+        display: table;
+      }
+    }
+  }
+  .play {
+    @include overlay-icon($height: $playlist-item-hover-height, $font-size: 200%)
+  }
+  .meta {
+    margin: 0 30px 0 0px;
+    padding: 9px 10px 5px 15px;
+  }
+  .title,
+  .subtitle {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .title, .title a {
+    color: $color-playlist-title-text;
+  }
+  .subtitle {
+    display: none;
+    font-size: 95%;
+    margin-top: 2px;
+  }
+  .remove {
+    @include set-position-absolute(right 0 top 0 bottom 0);
+    @include icon-button(navigation-close, $playlist-item-height, $playlist-item-hover-height);
+    display: none;
+    &:hover {
+      font-size: 120%;
+      color: $color-playlist-remove;
+    }
+  }
+  li:hover .remove {
+    display: table;
+  }
+}
+
+.playlists-wrapper {
+  padding: $spacing-base-unit;
+  font-size: 85%;
+  overflow-y: auto;
+  @include set-position-absolute(left 0 right 0 bottom 0);
+  @include set-layout('height-header', 'top');
+  z-index: $z-index-above;
+}
+
+.media-toggle {
+  @include pie-clearfix();
+  background: $color-playlist-sub-header-background;
+  margin-bottom: $spacing-half-unit;
+  li {
+    float: left;
+    padding: 5px 15px;
+    color: $color-playlist-sub-header-text;
+    cursor: pointer;
+  }
+  .playlist-bar.media-audio & {
+    li.audio {
+      color: $color-playlist-sub-header-active-text;
+      background: $color-playlist-sub-header-active-background;
+    }
+  }
+  .playlist-bar.media-video & {
+    li.video {
+      color: $color-playlist-sub-header-active-text;
+      background: $color-playlist-sub-header-active-background;
+    }
+  }
+}
+
+.playlist-header {
+  background: $color-playlist-header-background;
+  @include set-layout('height-header', 'height');
+  .player-toggle {
+    @include vertical-align-wrapper();
+    li {
+      @include set-layout('height-header', 'height');
+      @include vertical-align-element();
+      padding: 0 $spacing-double-unit 0 $spacing-double-unit;
+      color: $color-playlist-header-text;
+      cursor: pointer;
+      &:before {
+        margin-right: $spacing-half-unit;
+        font-size: 90%;
+      }
+      &.kodi {
+        @include icon(kodi-symbol, icomoon);
+      }
+      &.local {
+        @include icon(hardware-headset);
+      }
+    }
+    .active-player-kodi & {
+      li.kodi {
+        color: $color-kodi;
+        background: $color-playlist-background;
+      }
+    }
+    .active-player-local & {
+      li.local {
+        color: $color-local;
+        background: $color-playlist-background;
+      }
+    }
+  }
+
+  .playlist-menu {
+    @include set-position-absolute(top 0 right 0);
+    .menu-toggle {
+      @include icon-button-square(navigation-more-vert, $size-region-unit);
+      color: rgba($color-white, 0.5);
+      font-size: 150%;
+      &:hover {
+        color: $color-white;
+      }
+    }
+    @include at-desktop {
+      right: $size-region-unit;
+    }
+
+    .dropdown-menu {
+      background: tint($color-white, 2%);
+      padding: 0;
+      @include set-layout('height-header', 'top');
+      margin-top: -5px;
+      li {
+        padding: 0;
+        font-size: $font-size-base - 2;
+        &.dropdown-header {
+          background: rgba($color-black, 0.1);
+          color: rgba($color-black, 0.6);
+        }
+        &.dropdown-header, a {
+          padding: 0.6em 1em;
+        }
+        a {
+          color: rgba($color-black, 0.5);
+        }
+        .party-mode {
+          i {
+            display: none;
+            .active-player-local.local-partymode-on &,
+            .active-player-kodi.kodi-partymode-on & {
+              display: inline-block;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Toggle playlist based on player.
+.active-player-kodi {
+  .kodi-playlists {
+    display: block;
+  }
+  .local-playlists {
+    display: none;
+  }
+}
+.active-player-local {
+  .kodi-playlists {
+    display: none;
+  }
+  .local-playlists {
+    display: block;
+  }
+}
+
+.playlist-page__empty {
+  text-align: right;
+  margin-right: $spacing-base-unit;
+  h3 {
+    margin-bottom: $spacing-base-unit;
+  }
+}

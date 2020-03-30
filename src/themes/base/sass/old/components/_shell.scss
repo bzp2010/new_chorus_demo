@@ -1,0 +1,220 @@
+
+/**
+ * Webkit scrollbars!
+ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  border: $color-scrollbar;
+}
+::-webkit-scrollbar-thumb {
+  background: $color-scrollbar-handle;
+  cursor: pointer;
+  &:hover {
+    background: $color-scrollbar-hover-handle;
+  }
+}
+
+body,
+body.model-open {
+  overflow-y: scroll; // prevent jumping
+}
+
+// Logo
+#logo {
+  @include icon(kodi-symbol, icomoon);
+  @include set-position-fixed(top 0 left 0);
+  @include set-layout('height-header', 'height');
+  width: get-layout($desktop, 'width-nav');
+  //@include set-layout('width-nav', 'width');
+  @include vertical-align-wrapper();
+  z-index: $z-index-delta;
+  -webkit-perspective: 1000;
+  overflow: hidden;
+  text-align: center;
+  color: $color-brand-primary;
+  font-size: 2em;
+  @extend %icon-style--icomoon;
+  .loading & {
+    @include pulsate;
+  }
+  &:before {
+    @include vertical-align-element();
+  }
+}
+
+#page-title {
+  .title {
+    @include set-layout('height-header', 'padding-left');
+    display: none;
+    @include at-bp(large) {
+      display: inline-block;
+    }
+  }
+}
+
+// Fanart and its overlay.
+#fanart,
+#fanart-overlay {
+  @include set-position-fixed(top $size-region-unit bottom 0);
+  @include set-layout('height-player', 'bottom');
+  @include set-layout('width-playlist', 'right');
+  @include set-layout('width-nav', 'left');
+}
+#fanart {
+  background-color: $color-background;
+  background-size: cover;
+  background-position: 50% 50%;
+  z-index: $z-index-below;
+}
+#fanart-overlay {
+  z-index: $z-index-below + 1;
+  background-color: rgba($color-background, 0.7);
+  .section-home & {
+    display: none;
+  }
+}
+
+// Main region.
+#main {
+  @include pie-clearfix();
+  margin: $size-region-unit 0 $size-region-unit 0;
+  @include set-layout('width-playlist', 'margin-right');
+  @include set-layout('height-player', 'padding-bottom');
+  @include at-desktop {
+    margin-left: get-layout($desktop, width-nav);
+    margin-bottom: 0;
+  }
+
+  // Sidebar is hidden.
+  .shell-playlist-closed & {
+    @include set-layout('width-playlist-closed', 'margin-right');
+  }
+}
+
+
+// Playlist region.
+#sidebar-two {
+  @include set-position-fixed(top 0 left 0 right 0 bottom 0);
+  background: $color-playlist-background;
+  z-index: $z-index-gamma;
+  top: $size-region-unit;
+
+  // Hide on mobile unless on playlist page.
+  @include at-desktop {
+
+  }
+
+  display: none;
+  body.page-playlist & {
+    display: block;
+  }
+
+  @include at-desktop {
+    left: auto;
+    top: 0;
+    display: block;
+  }
+  @include set-layout('width-playlist', 'width');
+  // Fluid on small screen.
+  width: auto;
+
+  // Match footer height.
+  @include set-layout('height-player', 'bottom');
+
+  #playlist-summary {
+    display: none;
+  }
+
+  .playlist-toggle-open {
+    @include set-position-absolute(top 0 right 0);
+    width: $size-region-unit;
+    height: $size-region-unit;
+    @include icon-button-square(hardware-keyboard-arrow-right, $size-region-unit);
+    @include vertical-align-wrapper();
+    cursor: pointer;
+    display: none;
+    text-align: center;
+    &:before {
+      @include transition(all 0.4s linear);
+      @include vertical-align-element();
+      text-align: center;
+      font-size: 150%;
+      color: $color-playlist-toggle-icon;
+    }
+    @include at-desktop {
+      display: table;
+    }
+  }
+
+  // Sidebar is hidden.
+  .shell-playlist-closed & {
+    .playlist-toggle-open:before {
+      @include transform(rotate(-180deg));
+    }
+    @include set-layout('width-playlist-closed', 'width');
+    #playlist-bar {
+      display: none;
+    }
+    #playlist-summary {
+      display: block;
+    }
+  }
+}
+
+#offscreen {
+  display: none;
+}
+
+#disconnected {
+  @include set-position-fixed(top 0 left 0 right 0 bottom 0);
+  background: rgba($color-black, 0.7);
+  z-index: 9999999;
+  display: none;
+
+  .lost-connection & {
+    display: block;
+  }
+
+  i {
+    font-size: 300%;
+    color: $color-brand-primary;
+    margin: 10px 0 5px;
+  }
+
+  h2 {
+    margin: $spacing-half-unit 0;
+    font-size: 2em;
+  }
+
+  .message {
+    max-width: 400px;
+    width: 95%;
+    margin: 10% auto 0;
+    background: $color-white;
+    border-radius: 5px;
+    padding: $spacing-base-unit;
+    text-align: center;
+  }
+
+  .btn {
+    color: $color-white;
+    &:hover {
+      background: $color-brand-primary;
+    }
+  }
+
+  .try-connect {
+    .reconnecting & {
+      display: none;
+    }
+  }
+  .load-connect {
+    display: none;
+    .reconnecting & {
+      display: block;
+    }
+  }
+}

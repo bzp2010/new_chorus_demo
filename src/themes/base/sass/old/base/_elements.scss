@@ -1,0 +1,30 @@
+// =============================================================================
+// Name:            Generic elements
+// Description:     Base element styles
+// =============================================================================
+
+body {
+  background: $color-white;
+}
+* {
+  box-sizing: border-box;
+}
+
+img {
+  width: 100%;
+  max-width: auto;
+  height: auto;
+}
+
+ul, ol {
+  @include reset-list();
+}
+
+a {
+  color: $color-kodi;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}

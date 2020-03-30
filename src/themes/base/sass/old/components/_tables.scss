@@ -1,0 +1,19 @@
+/**
+ * Generic table listings for songs/files.
+ */
+.table-row {
+  .cell-first {
+    width: $song-row-height;
+    min-width: $song-row-height;
+    text-align: center;
+    color: rgba($color-text-dark, 0.5);
+    font-size: 95%;
+  }
+  .cell-last {
+    width: $song-row-height * 2;
+    min-width: $song-row-height * 2;
+    text-align: right;
+    color: rgba($color-text-dark, 0.5);
+    font-size: 95%;
+  }
+}

@@ -1,0 +1,290 @@
+
+
+.songs-table {
+  tr.song {
+    // Row defaults.
+    cursor: pointer;
+    font-size: 13px;
+    @include user-select(none);
+    // Placholder row.
+    &.ph td {
+      height: $song-row-height;
+    }
+    td {
+      vertical-align: middle;
+      position: relative;
+      border-bottom: 1px solid rgba(139, 139, 139, 0.05);
+      // Sizing.
+      &.song-title {
+        width: 60%;
+      }
+      &.song-artist {
+        width: 40%;
+      }
+    }
+    .crop {
+      @include text-crop($color-background);
+      display: block;
+      height: 18px;
+      white-space: normal;
+      .region-album-songs & {
+        @include text-fade($color-detail-content-background);
+      }
+    }
+    a {
+      color: rgba($color-text-dark, 0.7);
+      &:hover {
+        color: $color-text-dark;
+      }
+    }
+    .play,
+    .play:before,
+    .cell-first {
+      width: $song-row-height;
+      height: $song-row-height;
+    }
+    .play {
+      @include icon(av-play-arrow);
+      @include set-position-absolute(top 0 left 0);
+      @include vertical-align-element();
+      text-align: center;
+      cursor: pointer;
+      display: none;
+      font-size: 200%;
+      &:before {
+        @include vertical-align-element();
+      }
+      &:hover {
+        color: $color-greyscale-outer-space;
+      }
+    }
+    @include thumb-crop($song-row-height - 1, $song-row-height - 1);
+    .thumb {
+      @include set-position-absolute(top 0px left 0 bottom 1px);
+      display: none;
+    }
+    .add {
+      @include icon(content-add-box);
+      font-size: 140%;
+    }
+    .thumbed-up,
+    .thumbs {
+      @include icon(action-thumb-up);
+      font-size: 140%;
+      .disable-thumbs & {
+        display: none;
+      }
+    }
+    .thumbed-up {
+      @include set-position-absolute(top 0px right $song-row-action-width * 3);
+      margin-right: -2px;
+      display: none;
+      opacity: 0.4;
+      &:before {
+        @include vertical-align-element();
+        width: $song-row-height;
+        height: $song-row-height;
+      }
+    }
+    &.thumbs-up {
+      .thumbed-up {
+        display: table;
+      }
+      .thumbs {
+        color: $color-kodi;
+      }
+    }
+    .menu {
+      @include actions-menu();
+    }
+    .actions {
+      @include actions-song();
+    }
+    // Row hover.
+    &.menu-open,
+    &:hover {
+      @extend %table-row-hover;
+      .crop {
+        white-space: normal;
+      }
+      .duration,
+      .track {
+        display: none;
+      }
+      .play,
+      .actions {
+        display: block;
+      }
+      .thumbed-up {
+        display: none;
+      }
+    }
+    // Responsive.
+    .song-artist {
+      display: none;
+      @include at-desktop {
+        display: table-cell;
+      }
+    }
+    .song-album {
+      display: none;
+    }
+    // Selected row
+    &.selected {
+      border-left: 1px solid $color-kodi;
+      background: lighten($color-kodi, 45%);
+      .crop:after {
+        display: none;
+      }
+      .active-player-local & {
+        border-left: 1px solid $color-local;
+        background: lighten($color-local, 45%);
+      }
+    }
+    // Remove playlist item, hidden unless verbose
+    .cell-remove {
+      display: none;
+      padding-top: 12px;
+      padding-bottom: 0;
+    }
+    // Sortable item
+    &.sortable-ghost {
+      height: $song-row-height;
+      background: $color-greyscale-alto;
+      td {
+        opacity: 0;
+      }
+      .play {
+        display: none;
+      }
+    }
+  }
+  &.verbose {
+    .track {
+      margin-left: $song-row-height + 7;
+    }
+    .play {
+      @include overlay();
+      color: $color-white;
+    }
+    tr.song {
+      .thumb {
+        display: block;
+      }
+      td {
+        &.song-album {
+          @include at-desktop {
+            display: table-cell;
+          }
+          width: 30%;
+        }
+        &.song-title {
+          width: 80%;
+          @include at-desktop {
+            width: 45%;
+          }
+        }
+        &.song-artist {
+          width: 25%;
+        }
+      }
+
+      &:hover {
+        .play {
+          width: $song-row-height - 1;
+          height: $song-row-height - 1;
+          &:hover {
+            color: $color-white;
+          }
+        }
+        .track {
+          display: block;
+        }
+        .cell-remove {
+          .local-playlist & {
+            opacity: 1;
+            color: $color-playlist-remove;
+            i:before {
+              content: icon-code(navigation-cancel);
+            }
+          }
+        }
+      }
+      &.local-row-playing,
+      &.local-row-paused,
+      &.kodi-row-playing,
+      &.kodi-row-paused {
+        .track {
+          text-indent: 0;
+          background: none;
+        }
+        .thumb {
+          background: image-url('row-pause-blue.png') 0 50% no-repeat !important;
+          background-size: initial;
+        }
+        .play {
+          display: none;
+        }
+      }
+      &.kodi-row-playing {
+        .thumb {
+          background-image: image-url('row-playing-blue.gif') !important;
+        }
+      }
+      &.local-row-playing {
+        .thumb {
+          background-image: image-url('row-playing-pink.gif') !important;
+        }
+      }
+      &.local-row-paused {
+        .thumb {
+          background-image: image-url('row-pause-pink.png') !important;
+        }
+      }
+      .cell-remove {
+        .local-playlist & {
+          display: block;
+          opacity: 0.3;
+        }
+      }
+    }
+  }
+  &.basic {
+    .thumb {
+      display: none;
+    }
+  }
+  // Playing states
+  tr.song {
+    &.local-row-playing,
+    &.local-row-paused,
+    &.kodi-row-playing,
+    &.kodi-row-paused {
+      background: rgba($color-white, 0.9) !important;
+      &:hover td .crop,
+      td .crop {
+        @include text-fade($color-white);
+      }
+      .track {
+        background: image-url('row-pause-blue.png') 50% 50% no-repeat;
+        text-indent: -99999px;
+      }
+    }
+    &.local-row-paused {
+      .track {
+        background: image-url('row-pause-pink.png') 50% 50% no-repeat;
+      }
+    }
+    &.local-row-playing,
+    &.kodi-row-playing {
+      .track {
+        background-image: image-url('row-playing-blue.gif');
+      }
+    }
+    &.local-row-playing {
+      .track {
+        background-image: image-url('row-playing-pink.gif');
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+// =============================================================================
+// Name:            Material
+// Description:     Tweak Material styles.
+// =============================================================================
+
+%table-row-hover {
+  background-color: rgba($color-white, 0.3);
+  .crop {
+    @include text-crop(#E7E7E7);
+  }
+}
+
+/**
+ * Lighten the standard shadow.
+ */
+.shadow-z-1, .card, .snackbar {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.shadow-z-2-hover, .btn:hover:not(.btn-link) {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.13);
+}
+
+/**
+ * Tweak tables
+ */
+.table-striped > tbody > tr {
+  &:nth-child(odd) {
+    background-color: rgba($color-white, 0.5);
+  }
+  > td {
+    border: 0;
+  }
+}
+
+.table-hover > tbody > tr {
+  &:hover {
+    @extend %table-row-hover;
+  }
+}
+
+.table > tbody > tr > td {
+  border-top: none;
+}

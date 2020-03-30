@@ -1,0 +1,159 @@
+// State based changes.
+@mixin header-state($player: 'kodi', $brand-color: $color-kodi, $background: $color-player-background) {
+  .active-player-#{$player} {
+    #header {
+      background: $background;
+    }
+    #logo {
+      color: $brand-color;
+      background: $background
+    }
+    #nav-bar #nav-header {
+      //background: $background;
+    }
+  }
+}
+
+@include header-state('kodi', $color-kodi, $color-header-background);
+@include header-state('local', $color-local, $color-background-local);
+
+
+#header {
+  color: $color-header-text;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $size-region-unit;
+  z-index: $z-index-gamma + 1;
+  @include set-layout('width-playlist', 'right');
+
+  // Sidebar is hidden.
+  .shell-playlist-closed & {
+    @include set-layout('width-playlist-closed', 'right');
+  }
+
+  .search-toggle {
+    @include set-position-absolute(top 0 right ($size-region-unit * 3));
+    i {
+      @include icon-button-square(navigation-more-vert, $size-region-unit);
+    }
+  }
+}
+
+#selected-region {
+  display: none;
+  position: absolute;
+  top: 0;
+  height: $size-region-unit;
+  @include set-layout('width-search', 'right');
+
+  .menu-toggle {
+    font-size: 150%;
+    @include icon-button-square(navigation-more-vert, $size-region-unit);
+    float: right;
+  }
+
+  .dropdown-menu {
+    margin: 0;
+  }
+
+  .selected-text {
+    display: inline-block;
+    height: $size-region-unit;
+    line-height: $size-region-unit;
+  }
+
+  &.media-video {
+    .selected-watched,
+    .selected-unwatched {
+      display: block;
+    }
+    .selected-localadd {
+      display: none;
+    }
+  }
+
+  &.media-audio {
+    .selected-watched,
+    .selected-unwatched {
+      display: none;
+    }
+    .selected-localadd {
+      display: block;
+    }
+  }
+}
+
+/**
+ * Page title.
+ */
+#page-title {
+  margin: 0;
+  line-height: $size-region-unit;
+  font-size: 1.3em;
+  .context a,
+  .title {
+    padding: 0 0 0 0.5em;
+  }
+}
+
+
+/**
+ * Search region.
+ */
+#search-region {
+  @include set-position-absolute(top $size-region-unit left 0 right 0);
+  display: none;
+  body.section-search & {
+    display: block;
+  }
+  @include at-desktop {
+    top: 0;
+    left: auto;
+  }
+}
+
+/**
+ * Mobile menu structure.
+ */
+.mobile-menu {
+  @extend %reset-list;
+  @include set-position-absolute(top 0 right 0);
+  li {
+    display: inline-block;
+    margin: 0;
+    width: $size-region-unit;
+    height: $size-region-unit;
+  }
+  i {
+    @include icon-button-square(navigation-more-vert, $size-region-unit);
+    color: $color-header-text;
+    font-size: 120%;
+  }
+
+  @include at-desktop {
+    display: none;
+  }
+}
+
+/**
+ * Mobile menu icons.
+ */
+$mobile-menu-icons: (
+  remote: action-settings-remote,
+  search: action-search,
+  playlist: editor-format-list-bulleted
+);
+.mobile-menu--link {
+  @each $key, $icon in $mobile-menu-icons {
+    &__#{$key} i:before {
+      // Icon.
+      content: icon-code($icon);
+      // Active.
+      .section-#{$key} & {
+        color: $color-white;
+      }
+    }
+  }
+}

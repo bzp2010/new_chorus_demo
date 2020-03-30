@@ -1,0 +1,183 @@
+
+.streams-short {
+  text-align: center;
+  li {
+    display: inline-block;
+    font-size: 170%;
+    color: rgba($color-greyscale-outer-space, 0.4);
+    padding: 0 $spacing-half-unit;
+  }
+}
+
+.trailer {
+  position: relative;
+  cursor: pointer;
+  @include at-bp(medium) {
+    max-width: 238px;
+    float: left;
+    margin-right: $spacing-double-unit;
+  }
+  &:hover {
+    &:after {
+      content: "Watch trailer";
+      @include overlay();
+      @include set-position-absolute(top 0 right 0 bottom 0 left 0);
+      color: $color-white;
+      text-align: center;
+      padding-top: 30%;
+      font-size: 150%;
+    }
+  }
+}
+
+.cast-full {
+  height: 141px;
+  white-space: nowrap;
+  overflow-y: auto;
+  > li {
+    width: 80px;
+    display: inline-block;
+    margin: 0 0.6em 0 0;
+    position: relative;
+    a {
+      color: $color-greyscale-outer-space;
+    }
+    img {
+      @include filter(grayscale(100%));
+      opacity: 0.8;
+    }
+    .thumb {
+      @include image-crop(105px, 80px, 0, #CBCBCB);
+    }
+    strong {
+      font-weight: normal;
+    }
+    span {
+      font-size: 85%;
+      color: $color-greyscale-dove-gray;
+    }
+    span, strong {
+       @include text-crop($color-white);
+      display: block;
+    }
+    .meta {
+      position: absolute;
+      bottom: 0;
+      z-index: $z-index-beta;
+      background: $color-white;
+      padding: 4px;
+      right: 0;
+      left: 0;
+      display: none;
+    }
+    &:hover {
+      img {
+        @include filter(grayscale(0%));
+        opacity: 1;
+      }
+      .actions {
+        display: block;
+      }
+    }
+    .actions {
+      @include set-position-absolute(bottom 4px left 4px);
+      display: none;
+      li {
+        border-radius: 3px;
+        float: left;
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+        font-size: 1.25em;
+        margin-right: 5px;
+        opacity: 0.7;
+        &:hover {
+          opacity: 1;
+        }
+        &:before {
+          display: block !important;
+        }
+        &.google {
+          @include icon(google, icomoon);
+          color: #4285f4;
+          font-size: 1.15em;
+          background: $color-white;
+        }
+        &.imdb {
+          @include icon(imdb, icomoon);
+          color: #e3b922;
+          background: $color-black;
+        }
+      }
+    }
+  }
+}
+
+.imdblink {
+  @include flat-button($icon: action-launch);
+}
+
+.btn-flat-play {
+  @include flat-button($color: $color-kodi, $icon: av-play-circle-fill);
+}
+
+.btn-flat-add {
+  @include flat-button($icon: content-add-circle);
+}
+
+.btn-flat-stream {
+  @include flat-button($icon: hardware-cast-connected);
+}
+
+.btn-flat-download {
+  @include flat-button($icon: content-archive);
+}
+
+.btn-flat-more {
+  @include flat-button($icon: navigation-more-vert);
+}
+
+.btn-flat-watched {
+  @include flat-button($icon: toggle-check-box);
+  .action-watched {
+    display: inline;
+  }
+  .action-unwatched {
+    display: none;
+  }
+  .is-watched & {
+    .action-watched {
+      display: none;
+    }
+    .action-unwatched {
+      display: inline;
+    }
+  }
+}
+
+.entity-progress {
+  @include set-position-absolute(top -2px right 0 left 0);
+  z-index: 10;
+  .current-progress {
+    @include transition(width 0.3s linear);
+    height: 3px;
+    background: $color-kodi;
+  }
+}
+
+// Tv eps, toggle visibility of certain teaser els
+.season-show {
+  .card {
+    .show-name,
+    .ep-num {
+      display: none;
+    }
+  }
+}
+.landing-page {
+  .card {
+    .ep-num-full {
+      display: none;
+    }
+  }
+}
